@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mobile Verification</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+        nav {
+            background-color: #333;
+            color: #fff;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        nav h1 {
+            margin: 0;
+            font-size: 20px;
+        }
+        .container {
+            margin-top: 20px;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+<nav>
+    <h1>Mobile Verification</h1>
+    <button id="viewLogBtn" onclick="viewLog()">View Log</button>
+    <span>User Name:</span>
+</nav>
+
+<div class="container">
+    <button onclick="allow()">Allow</button>
+    <button onclick="deny()">Deny</button>
+</div>
+
+<script>
+    function allow() {
+        writeToTextFile("yes");
+    }
+
+    function deny() {
+        writeToTextFile("no");
+    }
+
+    function writeToTextFile(content) {
+        const path = "C:/Users/Devajith S/Desktop/Wault/Local DB/Dynamic/Verify.txt"; // Update with your desired custom path
+        const fs = require('fs'); // In a real web environment, this would not work due to security restrictions
+        fs.writeFile(path, content, (err) => {
+            if (err) {
+                console.error("Error writing to file:", err);
+            } else {
+                console.log("File written successfully.");
+                clearText();
+            }
+        });
+    }
+
+    function clearText() {
+        // Clear user name input field (if any)
+        document.querySelector('nav span').textContent = "User Name:";
+    }
+
+    function viewLog() {
+        // Implement view log functionality here
+        alert("View Log clicked. Implement your view log logic.");
+    }
+</script>
+
+</body>
+</html>

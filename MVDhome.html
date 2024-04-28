@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MVD</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            position: relative;
+            background: url('mvd1.jpg') no-repeat center center fixed;
+            background-size: cover;
+            opacity:1; /* 10% opacity for the background image */
+        }
+        h1 {
+            font-weight: bold;
+            font-size: 36px;
+            color: #000; /* Set title color to black */
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 1; /* Ensure title is above other content */
+        }
+        .title-bar {
+            position: absolute;
+            top: 20px; /* Adjust top position to place it under the title */
+            left: 50%;
+            transform: translateX(-50%);
+            width: 1520px; /* Adjust width of the bar */
+            height: 100px; /* Adjust height of the bar */
+            background-color: rgba(253, 138, 138, 0.481); /* Light grey color with 50% opacity */
+            border-radius: 5px;
+            z-index: 0; /* Place the bar below the title */
+        }
+        .container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            background-color: rgba(76, 175, 80, 0.8); /* Green color for container with 80% opacity */
+            color: #fff;
+            transition: background-color 0.3s ease;
+            z-index: 1; /* Ensure container is above the background */
+        }
+        .container.found {
+            background-color: rgba(244, 67, 54, 0.8); /* Red color when match is found with 80% opacity */
+        }
+        h2 {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+        button {
+            padding: 12px 24px;
+            font-size: 18px;
+            border: none;
+            border-radius: 4px;
+            background-color: #fff;
+            color: #4CAF50;
+            cursor: pointer;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+        button:hover {
+            background-color: #e0e0e0;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <h1>MVD</h1>
+    <div class="title-bar"></div>
+
+    <div class="container" id="container">
+        <h2>Waiting For Authentication</h2>
+    </div>
+
+    <script>
+        function checkAuthentication() {
+            setInterval(() => {
+                $.ajax({
+                    url: 'read_file.php',
+                    type: 'GET',
+                    success: function(response) {
+                        const fileContent = response.trim();
+                        
+                        if (fileContent === "Employee 1" || fileContent === "Employee 2") {
+                            const container = document.getElementById("container");
+                            container.classList.add("found");
+                            container.innerHTML = `
+                                <h2>Found Match</h2>
+                                <button onclick="continueLogin()">Continue Login</button>
+                            `;
+                        } else {
+                            const container = document.getElementById("container");
+                            container.classList.remove("found");
+                            container.innerHTML = `
+                                <h2>Waiting For Authentication</h2>
+                            `;
+                        }
+                    },
+                    error: function() {
+                        console.error('Error fetching file');
+                    }
+                });
+            }, 2000); // Check every 2 seconds (adjust as needed)
+        }
+
+        function continueLogin() {
+            // Redirect to empdash.html upon button click
+            window.location.href = "empdash.html";
+        }
+
+        // Start checking for authentication
+        checkAuthentication();
+    </script>
+</body>
+</html>

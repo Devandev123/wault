@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verification</title>
+    <style>
+        /* Reset default margin and padding */
+        body, html {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa; /* Light gray background */
+            height: 100%;
+        }
+
+        /* Navigation bar */
+        .navbar {
+            background-color: #343a40; /* Dark navbar color */
+            overflow: hidden;
+        }
+
+        .navbar a {
+            float: right;
+            display: block;
+            color: white;
+            text-align: center;
+            padding: 14px 20px;
+            text-decoration: none;
+            transition: background-color 0.3s;
+        }
+
+        .navbar a:hover {
+            background-color: #555;
+        }
+
+        /* Container */
+        .container {
+            max-width: 800px; /* Increased container width */
+            margin: 50px auto; /* Centered container with more margin */
+            background-color: #fff; /* White container background */
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1); /* Shadow effect */
+            text-align: center;
+        }
+
+        /* Radio button styling */
+        .radio-container {
+            margin-bottom: 30px;
+        }
+
+        .radio-container input[type="radio"] {
+            display: none;
+        }
+
+        .radio-container label {
+            display: inline-block;
+            cursor: pointer;
+            padding: 12px 24px;
+            font-size: 18px;
+            border-radius: 4px;
+            background-color: #e9ecef; /* Light gray background */
+            margin-right: 20px;
+            transition: background-color 0.3s;
+        }
+
+        .radio-container label:hover {
+            background-color: #ced4da;
+        }
+
+        .radio-container input[type="radio"]:checked + label {
+            background-color: #007bff; /* Blue when checked */
+            color: #fff;
+        }
+
+        /* Button styling */
+        .button-container {
+            margin-top: 30px;
+        }
+
+        .button-container button {
+            padding: 16px 32px;
+            font-size: 18px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-right: 20px;
+            transition: background-color 0.3s;
+        }
+
+        .button-container button:hover {
+            background-color: #dc3545; /* Red on hover */
+            color: #fff;
+        }
+
+        /* Center floating image */
+        .floating-image {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 1000; /* Ensure image is on top */
+            display: none; /* Initially hidden */
+            max-width: 80%; /* Limit image width */
+            max-height: 80%; /* Limit image height */
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2); /* Image shadow */
+        }
+    </style>
+</head>
+<body>
+
+<!-- Navigation bar -->
+<div class="navbar">
+    <a href="#" onclick="terminate()">Terminate</a>
+</div>
+
+<!-- Main content container -->
+<div class="container">
+    <h1>Verification</h1>
+
+    <!-- Radio button container -->
+    <div class="radio-container">
+        <input type="radio" id="aadhar" name="infoType" value="aadhar">
+        <label for="aadhar">Aadhar Details</label>
+        <input type="radio" id="rcDetails" name="infoType" value="rcDetails">
+        <label for="rcDetails">RC Details</label>
+    </div>
+
+    <!-- Button container -->
+    <div class="button-container">
+        <button onclick="showImage('view')" style="background-color: #dc3545;">View</button>
+        <button onclick="showImage('verify')" style="background-color: #dc3545;">Verify</button>
+    </div>
+
+    <!-- Floating image -->
+    <img src="" alt="Image" class="floating-image" id="floatingImage">
+</div>
+
+<script>
+    // JavaScript function to handle termination
+    function terminate() {
+        if (confirm("Are you sure you want to terminate?")) {
+            window.location.href = "empdash.html";
+        }
+    }
+
+    // JavaScript function to show respective image on button click
+    function showImage(action) {
+        var infoType = document.querySelector('input[name="infoType"]:checked');
+        if (!infoType) {
+            alert("Please select Aadhar Details or RC Details.");
+            return;
+        }
+
+        var imageSrc = "";
+
+        if (infoType.value === "aadhar") {
+            if (action === 'view') {
+                imageSrc = "path_to_aadhar_view_image.jpg";
+            } else if (action === 'verify') {
+                imageSrc = "path_to_aadhar_verify_image.jpg";
+            }
+        } else if (infoType.value === "rcDetails") {
+            if (action === 'view') {
+                imageSrc = "path_to_rc_view_image.jpg";
+            } else if (action === 'verify') {
+                imageSrc = "path_to_rc_verify_image.jpg";
+            }
+        }
+
+        var floatingImage = document.getElementById("floatingImage");
+        floatingImage.src = imageSrc;
+        floatingImage.style.display = "block";
+    }
+</script>
+
+</body>
+</html>

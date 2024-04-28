@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employee Dashboard</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f2f2f2;
+            margin: 0;
+            padding: 0;
+        }
+        .navbar {
+            background-color: #3498db; /* Light blue */
+            color: #fff;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .container {
+            max-width: 800px; /* Increased container width */
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        label {
+            display: block;
+            margin-bottom: 10px;
+        }
+        button {
+            background-color: #4CAF50; /* Green */
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        button:hover {
+            background-color: #45a049; /* Darker green on hover */
+        }
+        .proceed-btn {
+            background-color: #f44336; /* Red */
+        }
+        #popup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: rgba(0, 0, 0, 0.8);
+            color: #fff;
+            padding: 10px 20px;
+            border-radius: 5px;
+            z-index: 999;
+        }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <span style="color: #fff;">Name:</span>
+        <span id="userName" style="color: #fff; margin-left: 5px;"></span>
+        <a href="MVDhome.html" style="color: #fff; text-decoration: none;">Logout</a>
+    </div>
+
+    <div class="container" id="mainContainer">
+        <h2>Select Service</h2>
+        <div>
+            <label><input type="radio" name="service" value="Renewal"> Renewal Of License</label>
+            <label><input type="radio" name="service" value="Ownership"> Ownership Change</label>
+            <label><input type="radio" name="service" value="Registration"> New Registration</label>
+        </div>
+        <button id="authenticateBtn">Authenticate</button>
+    </div>
+
+    <div id="popup"></div>
+
+    <script>
+        document.getElementById('authenticateBtn').addEventListener('click', function() {
+            var timeout = 5000; // 5 seconds timeout
+            var interval = 500; // Check interval (500 milliseconds)
+
+            var timer = setInterval(function() {
+                // AJAX request to read contents of Fingerprint.txt
+                var xhr = new XMLHttpRequest();
+                xhr.open('GET', 'read_file.php', true); // Adjust 'read_file.php' path accordingly
+                xhr.onreadystatechange = function() {
+                    if (xhr.readyState === XMLHttpRequest.DONE) {
+                        if (xhr.status === 200) {
+                            var fingerprintText = xhr.responseText;
+                            if (fingerprintText.includes('User 1')) {
+                                clearInterval(timer); // Stop checking
+                                showPopup('User 1 Details Found');
+                                changeContainer();
+                            } else if (fingerprintText.includes('User 2')) {
+                                clearInterval(timer); // Stop checking
+                                showPopup('User 2 Details Found');
+                                changeContainer();
+                            }
+                        } else {
+                            console.error('Error reading Fingerprint.txt:', xhr.status);
+                        }
+                    }
+                };
+                xhr.send();
+            }, interval);
+
+            // Stop checking after 5 seconds
+            setTimeout(function() {
+                clearInterval(timer);
+            }, timeout);
+        });
+
+        function showPopup(message) {
+            var popup = document.getElementById('popup');
+            popup.textContent = message;
+            popup.style.display = 'block';
+            setTimeout(function() {
+                popup.style.display = 'none';
+            }, 3000); // Hide popup after 3 seconds
+        }
+
+        function changeContainer() {
+            var container = document.getElementById('mainContainer');
+            container.innerHTML = `
+                <h2>Match Found!</h2>
+                <button class="proceed-btn" id="proceedBtn">Proceed</button>
+            `;
+            document.getElementById('proceedBtn').addEventListener('click', function() {
+                // Navigate to userdash.html
+                window.location.href = 'userdash.html';
+            });
+        }
+    </script>
+</body>
+</html>
